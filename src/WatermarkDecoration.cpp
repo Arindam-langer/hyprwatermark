@@ -6,7 +6,6 @@
 #include <hyprland/src/render/Renderer.hpp>
 #include <hyprland/src/Compositor.hpp>
 #include <hyprutils/math/Misc.hpp>
-#include <hyprutils/math/Misc.hpp>
 
 CWatermarkDecoration::CWatermarkDecoration(PHLWINDOW window)
     : IHyprWindowDecoration(window), m_window(window) {
@@ -62,7 +61,7 @@ void CWatermarkDecoration::draw(PHLMONITOR monitor, float const& alpha) {
         data.tex = TextureManager::globalTexture;
         data.box = box;
         data.a = Config::opacity * alpha;
-        data.round = w->rounding();
+        data.round = static_cast<int>(w->rounding());
         data.roundingPower = w->roundingPower();
 
         g_pHyprRenderer->m_renderPass.add(makeUnique<CTexPassElement>(data));

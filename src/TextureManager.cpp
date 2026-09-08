@@ -1,7 +1,7 @@
 #include "TextureManager.hpp"
 #include <hyprgraphics/image/Image.hpp>
 #include <hyprland/src/render/Renderer.hpp>
-#include <hyprland/src/debug/Log.hpp>
+#include <hyprland/src/debug/log/Logger.hpp>
 #include <filesystem>
 
 namespace TextureManager {
@@ -14,20 +14,20 @@ namespace TextureManager {
         }
 
         Hyprgraphics::CImage img(path);
-        if (!img.loadSuccess) {
-            Debug::log(ERR, "[hypr-watermark] Failed to load image: {}", path);
+        if (!img.success()) {
+            Log::logger->log(Log::ERR, "[hypr-watermark] Failed to load image: {}", path);
             globalTexture = nullptr;
             return;
         }
 
         auto cairoSurf = img.cairoSurface();
         if (!cairoSurf || !cairoSurf->cairo()) {
-            Debug::log(ERR, "[hypr-watermark] Failed to get cairo surface for: {}", path);
+            Log::logger->log(Log::ERR, "[hypr-watermark] Failed to get cairo surface for: {}", path);
             globalTexture = nullptr;
             return;
         }
 
         globalTexture = g_pHyprRenderer->createTexture(cairoSurf->cairo());
-        Debug::log(LOG, "[hypr-watermark] Successfully loaded texture: {}", path);
+        Log::logger->log(Log::INFO, "[hypr-watermark] Successfully loaded texture: {}", path);
     }
 }

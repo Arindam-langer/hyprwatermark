@@ -4,7 +4,7 @@
 #include <string>
 
 namespace TextureManager {
-    extern SP<Render::ITexture> globalTexture;
+extern SP<Render::ITexture> globalTexture;
 
-    void loadTexture(const std::string& path);
-}
+void loadTexture(const std::string &path);
+} // namespace TextureManager
