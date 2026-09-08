@@ -1,15 +1,21 @@
 #include "WatermarkDecoration.hpp"
 #include "Config.hpp"
 #include "TextureManager.hpp"
+
 #include <hyprland/src/Compositor.hpp>
 #include <hyprland/src/render/Renderer.hpp>
+#include <hyprland/src/render/decorations/IHyprWindowDecoration.hpp>
 #include <hyprland/src/render/pass/TexPassElement.hpp>
 #include <hyprutils/math/Misc.hpp>
 
 CWatermarkDecoration::CWatermarkDecoration(PHLWINDOW window)
     : IHyprWindowDecoration(window), m_window(window) {}
 
-CWatermarkDecoration::~CWatermarkDecoration() {}
+CWatermarkDecoration::~CWatermarkDecoration() {
+  // Damage the last watermark area when the decoration is destroyed.
+  if (m_hasLastBox)
+    g_pHyprRenderer->damageBox(m_lastBox);
+}
 
 SDecorationPositioningInfo CWatermarkDecoration::getPositioningInfo() {
   SDecorationPositioningInfo info;
@@ -26,27 +32,67 @@ void CWatermarkDecoration::onPositioningReply(
 
 void CWatermarkDecoration::draw(PHLMONITOR monitor, float const &alpha) {
   auto w = m_window.lock();
-  if (!w || !w->m_isMapped)
+
+  if (!w || !w->m_isMapped || !TextureManager::globalTexture)
     return;
 
-  // Use current geometric box
   auto pos = w->position(Desktop::View::IGeometric::GEOMETRIC_CURRENT);
+
   auto size = w->size(Desktop::View::IGeometric::GEOMETRIC_CURRENT);
 
-  // Convert to monitor-local logical coordinates
-  CBox box = {pos.x - monitor->position().x, pos.y - monitor->position().y,
-              size.x, size.y};
+  const auto textureSize = TextureManager::globalTexture->m_size;
 
-  if (TextureManager::globalTexture) {
-    CTexPassElement::SRenderData data;
-    data.tex = TextureManager::globalTexture;
-    data.box = box;
-    data.a = Config::opacity * alpha;
-    data.round = static_cast<int>(w->rounding());
-    data.roundingPower = w->roundingPower();
+  const float watermarkWidth = textureSize.x * Config::scale;
 
-    g_pHyprRenderer->m_renderPass.add(makeUnique<CTexPassElement>(data));
+  const float watermarkHeight = textureSize.y * Config::scale;
+
+  float x = pos.x;
+  float y = pos.y;
+
+  if (Config::position == "center") {
+    x += (size.x - watermarkWidth) / 2.0f;
+    y += (size.y - watermarkHeight) / 2.0f;
+  } else if (Config::position == "top-left") {
+    // Window origin.
+  } else if (Config::position == "top-right") {
+    x += size.x - watermarkWidth;
+  } else if (Config::position == "bottom-left") {
+    y += size.y - watermarkHeight;
+  } else if (Config::position == "bottom-right") {
+    x += size.x - watermarkWidth;
+    y += size.y - watermarkHeight;
+  } else {
+    // Unknown position: default to center.
+    x += (size.x - watermarkWidth) / 2.0f;
+    y += (size.y - watermarkHeight) / 2.0f;
   }
+
+  x += Config::offsetX;
+  y += Config::offsetY;
+
+  CBox box = {
+      x - monitor->position().x,
+      y - monitor->position().y,
+      watermarkWidth,
+      watermarkHeight,
+  };
+
+  // Damage the previous watermark location if it changed.
+  if (m_hasLastBox)
+    g_pHyprRenderer->damageBox(m_lastBox);
+
+  // Remember the new watermark location.
+  m_lastBox = box;
+  m_hasLastBox = true;
+
+  CTexPassElement::SRenderData data;
+  data.tex = TextureManager::globalTexture;
+  data.box = box;
+  data.a = Config::opacity * alpha;
+  data.round = static_cast<int>(w->rounding());
+  data.roundingPower = w->roundingPower();
+
+  g_pHyprRenderer->m_renderPass.add(makeUnique<CTexPassElement>(data));
 }
 
 eDecorationType CWatermarkDecoration::getDecorationType() {
@@ -56,10 +102,16 @@ eDecorationType CWatermarkDecoration::getDecorationType() {
 void CWatermarkDecoration::updateWindow(PHLWINDOW /*window*/) {
   damageEntire();
 }
+
 void CWatermarkDecoration::damageEntire() {
   auto w = m_window.lock();
+
   if (!w)
     return;
+
+  if (m_hasLastBox)
+    g_pHyprRenderer->damageBox(m_lastBox);
+
   g_pHyprRenderer->damageWindow(w);
 }
 
