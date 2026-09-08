@@ -1,0 +1,179 @@
+g++ -std=c++23 -shared -fPIC -Wall -Wextra -O3 -flto -I/var/cache/hyprpm/aru/headersRoot/include -I/var/cache/hyprpm/aru/headersRoot/include/hyprland/protocols -I/var/cache/hyprpm/aru/headersRoot/include/hyprland -I/var/cache/hyprpm/aru/headersRoot/include/hyprland/src -I/usr/include/libdrm -I/usr/include/cairo -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/pixman-1 -o hypr-watermark.so src/main.cpp src/WatermarkDecoration.cpp -laquamarine -lhyprcursor -lhyprlang -lhyprutils -ldrm -lEGL -lcairo -lxkbcommon -linput -lwayland-server -lm -lxcb-icccm -lxcb-composite -lxcb-xfixes -lxcb-render -lxcb-res -lxcb-errors -lxcb -lhyprgraphics
+In file included from /var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../defines.hpp:5,
+                 from /var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/IHyprWindowDecoration.hpp:4,
+                 from src/WatermarkDecoration.hpp:3,
+                 from src/main.cpp:1:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../helpers/Color.hpp: In member function ‘CHyprColor CHyprColor::operator-(const CHyprColor&) const’:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../helpers/Color.hpp:28:44: warning: unused parameter ‘c2’ [-Wunused-parameter]
+   28 |     CHyprColor operator-(const CHyprColor& c2) const {
+      |                          ~~~~~~~~~~~~~~~~~~^~
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../helpers/Color.hpp: In member function ‘CHyprColor CHyprColor::operator+(const CHyprColor&) const’:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../helpers/Color.hpp:33:44: warning: unused parameter ‘c2’ [-Wunused-parameter]
+   33 |     CHyprColor operator+(const CHyprColor& c2) const {
+      |                          ~~~~~~~~~~~~~~~~~~^~
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../helpers/Color.hpp: In member function ‘CHyprColor CHyprColor::operator*(const float&) const’:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../helpers/Color.hpp:38:39: warning: unused parameter ‘c2’ [-Wunused-parameter]
+   38 |     CHyprColor operator*(const float& c2) const {
+      |                          ~~~~~~~~~~~~~^~
+In file included from /var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../Texture.hpp:4,
+                 from /var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../Framebuffer.hpp:5,
+                 from /var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/Transformer.hpp:5,
+                 from /var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/Window.hpp:15,
+                 from src/WatermarkDecoration.hpp:4:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp: At global scope:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:395:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  395 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:395:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:395:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:395:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:403:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  403 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:403:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:403:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:403:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:411:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  411 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:411:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:411:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:411:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:420:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  420 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:420:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:420:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:420:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:429:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  429 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:429:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:429:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:429:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:437:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  437 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:437:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:437:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:437:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:448:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  448 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:448:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:448:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::luminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:448:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:448:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+src/main.cpp: In function ‘PLUGIN_DESCRIPTION_INFO pluginInit(void*)’:
+src/main.cpp:49:35: error: ‘class CCompositor’ has no member named ‘m_windows’
+   49 |     for (auto& w : g_pCompositor->m_windows) {
+      |                                   ^~~~~~~~~
+In file included from /var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../defines.hpp:5,
+                 from /var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/IHyprWindowDecoration.hpp:4,
+                 from src/WatermarkDecoration.hpp:3,
+                 from src/WatermarkDecoration.cpp:1:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../helpers/Color.hpp: In member function ‘CHyprColor CHyprColor::operator-(const CHyprColor&) const’:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../helpers/Color.hpp:28:44: warning: unused parameter ‘c2’ [-Wunused-parameter]
+   28 |     CHyprColor operator-(const CHyprColor& c2) const {
+      |                          ~~~~~~~~~~~~~~~~~~^~
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../helpers/Color.hpp: In member function ‘CHyprColor CHyprColor::operator+(const CHyprColor&) const’:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../helpers/Color.hpp:33:44: warning: unused parameter ‘c2’ [-Wunused-parameter]
+   33 |     CHyprColor operator+(const CHyprColor& c2) const {
+      |                          ~~~~~~~~~~~~~~~~~~^~
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../helpers/Color.hpp: In member function ‘CHyprColor CHyprColor::operator*(const float&) const’:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/decorations/../../helpers/Color.hpp:38:39: warning: unused parameter ‘c2’ [-Wunused-parameter]
+   38 |     CHyprColor operator*(const float& c2) const {
+      |                          ~~~~~~~~~~~~~^~
+In file included from /var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../Texture.hpp:4,
+                 from /var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../Framebuffer.hpp:5,
+                 from /var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/Transformer.hpp:5,
+                 from /var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/Window.hpp:15,
+                 from src/WatermarkDecoration.hpp:4:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp: At global scope:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:395:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  395 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:395:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:395:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:395:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:403:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  403 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:403:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:403:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:403:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:411:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  411 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:411:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:411:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:411:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:420:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  420 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:420:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:420:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:420:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:429:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  429 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:429:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:429:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:429:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:437:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  437 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:437:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:437:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:437:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:448:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::rawICC’ [-Wmissing-field-initializers]
+  448 |     });
+      |     ^
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:448:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringPrimaries’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:448:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::luminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:448:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::masteringLuminances’ [-Wmissing-field-initializers]
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/desktop/view/../../render/transformer/../../helpers/cm/ColorManagement.hpp:448:5: warning: missing initializer for member ‘NColorManagement::SImageDescription::icc’ [-Wmissing-field-initializers]
+In file included from src/WatermarkDecoration.cpp:4:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/Renderer.hpp: In member function ‘virtual bool Render::IHyprRenderer::beginRenderInternal(PHLMONITOR, Hyprutils::Math::CRegion&, bool)’:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/Renderer.hpp:227:53: warning: unused parameter ‘pMonitor’ [-Wunused-parameter]
+  227 |         virtual bool beginRenderInternal(PHLMONITOR pMonitor, CRegion& damage, bool simple = false) {
+      |                                          ~~~~~~~~~~~^~~~~~~~
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/Renderer.hpp:227:72: warning: unused parameter ‘damage’ [-Wunused-parameter]
+  227 |         virtual bool beginRenderInternal(PHLMONITOR pMonitor, CRegion& damage, bool simple = false) {
+      |                                                               ~~~~~~~~~^~~~~~
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/Renderer.hpp:227:85: warning: unused parameter ‘simple’ [-Wunused-parameter]
+  227 |         virtual bool beginRenderInternal(PHLMONITOR pMonitor, CRegion& damage, bool simple = false) {
+      |                                                                                ~~~~~^~~~~~~~~~~~~~
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/Renderer.hpp: In member function ‘virtual bool Render::IHyprRenderer::beginFullFakeRenderInternal(PHLMONITOR, Hyprutils::Math::CRegion&, SP<Render::IFramebuffer>, bool)’:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/Renderer.hpp:230:61: warning: unused parameter ‘pMonitor’ [-Wunused-parameter]
+  230 |         virtual bool beginFullFakeRenderInternal(PHLMONITOR pMonitor, CRegion& damage, SP<IFramebuffer> fb, bool simple = false) {
+      |                                                  ~~~~~~~~~~~^~~~~~~~
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/Renderer.hpp:230:80: warning: unused parameter ‘damage’ [-Wunused-parameter]
+  230 |         virtual bool beginFullFakeRenderInternal(PHLMONITOR pMonitor, CRegion& damage, SP<IFramebuffer> fb, bool simple = false) {
+      |                                                                       ~~~~~~~~~^~~~~~
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/Renderer.hpp:230:105: warning: unused parameter ‘fb’ [-Wunused-parameter]
+  230 |         virtual bool beginFullFakeRenderInternal(PHLMONITOR pMonitor, CRegion& damage, SP<IFramebuffer> fb, bool simple = false) {
+      |                                                                                        ~~~~~~~~~~~~~~~~~^~
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/Renderer.hpp:230:114: warning: unused parameter ‘simple’ [-Wunused-parameter]
+  230 |         virtual bool beginFullFakeRenderInternal(PHLMONITOR pMonitor, CRegion& damage, SP<IFramebuffer> fb, bool simple = false) {
+      |                                                                                                             ~~~~~^~~~~~~~~~~~~~
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/Renderer.hpp: In member function ‘virtual bool Render::IHyprRenderer::initRenderBuffer(SP<Aquamarine::IBuffer>, uint32_t)’:
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/Renderer.hpp:234:63: warning: unused parameter ‘buffer’ [-Wunused-parameter]
+  234 |         virtual bool initRenderBuffer(SP<Aquamarine::IBuffer> buffer, uint32_t fmt) {
+      |                                       ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+/var/cache/hyprpm/aru/headersRoot/include/hyprland/src/render/Renderer.hpp:234:80: warning: unused parameter ‘fmt’ [-Wunused-parameter]
+  234 |         virtual bool initRenderBuffer(SP<Aquamarine::IBuffer> buffer, uint32_t fmt) {
+      |                                                                       ~~~~~~~~~^~~
+src/WatermarkDecoration.cpp: In member function ‘virtual void CWatermarkDecoration::onPositioningReply(const SDecorationPositioningReply&)’:
+src/WatermarkDecoration.cpp:42:82: warning: unused parameter ‘reply’ [-Wunused-parameter]
+   42 | void CWatermarkDecoration::onPositioningReply(const SDecorationPositioningReply& reply) {
+      |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+src/WatermarkDecoration.cpp: In member function ‘virtual void CWatermarkDecoration::draw(PHLMONITOR, const float&)’:
+src/WatermarkDecoration.cpp:46:66: warning: unused parameter ‘alpha’ [-Wunused-parameter]
+   46 | void CWatermarkDecoration::draw(PHLMONITOR monitor, float const& alpha) {
+      |                                                     ~~~~~~~~~~~~~^~~~~
+src/WatermarkDecoration.cpp: In member function ‘virtual void CWatermarkDecoration::updateWindow(PHLWINDOW)’:
+src/WatermarkDecoration.cpp:73:51: warning: unused parameter ‘window’ [-Wunused-parameter]
+   73 | void CWatermarkDecoration::updateWindow(PHLWINDOW window) {
+      |                                         ~~~~~~~~~~^~~~~~
+make: *** [Makefile:14: hypr-watermark.so] Error 1
