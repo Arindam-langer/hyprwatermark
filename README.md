@@ -46,6 +46,25 @@ The plugin:
 
 Because the watermark is implemented as a window decoration, it remains synchronized with the window rather than behaving as an independent desktop overlay.
 
+## Installation
+
+The easiest way to install and manage this plugin is by using `hyprpm` (Hyprland Plugin Manager).
+
+1. Add the repository and compile the plugin:
+   ```bash
+   hyprpm add https://github.com/Arindam-langer/hyprwatermark
+   ```
+
+2. Enable the plugin:
+   ```bash
+   hyprpm enable hyprwatermark
+   ```
+
+3. To ensure the plugin loads every time you start Hyprland, make sure you have this line in your `hyprland.conf`:
+   ```conf
+   exec-once = hyprpm reload -n
+   ```
+
 ## Configuration
 
 ### Hyprland Config

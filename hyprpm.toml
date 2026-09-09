@@ -1,0 +1,11 @@
+[hyprwatermark]
+
+description = "A Hyprland plugin that adds customizable image watermarks inside application windows."
+
+authors = ["Arindam Langer"]
+
+output = "hypr-watermark.so"
+
+build = [
+    "make"
+]
