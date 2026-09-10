@@ -12,7 +12,6 @@ CWatermarkDecoration::CWatermarkDecoration(PHLWINDOW window)
     : IHyprWindowDecoration(window), m_window(window) {}
 
 CWatermarkDecoration::~CWatermarkDecoration() {
-  // Damage the last watermark area when the decoration is destroyed.
   if (m_hasLastBox)
     g_pHyprRenderer->damageBox(m_lastBox);
 }
@@ -33,7 +32,8 @@ void CWatermarkDecoration::onPositioningReply(
 void CWatermarkDecoration::draw(PHLMONITOR monitor, float const &alpha) {
   auto w = m_window.lock();
 
-  if (!w || !w->m_isMapped || !TextureManager::globalTexture)
+  if (!w || !w->m_isMapped || !w->m_workspace ||
+      !w->m_workspace->isVisible() || !TextureManager::globalTexture)
     return;
 
   auto pos = w->position(Desktop::View::IGeometric::GEOMETRIC_CURRENT);
@@ -77,11 +77,13 @@ void CWatermarkDecoration::draw(PHLMONITOR monitor, float const &alpha) {
       watermarkHeight,
   };
 
-  // Damage the previous watermark location if it changed.
-  if (m_hasLastBox)
+  // Damage the previous watermark area only if its geometry changed.
+  if (m_hasLastBox &&
+      (m_lastBox.x != box.x || m_lastBox.y != box.y ||
+       m_lastBox.width != box.width || m_lastBox.height != box.height)) {
     g_pHyprRenderer->damageBox(m_lastBox);
+  }
 
-  // Remember the new watermark location.
   m_lastBox = box;
   m_hasLastBox = true;
 
@@ -104,15 +106,8 @@ void CWatermarkDecoration::updateWindow(PHLWINDOW /*window*/) {
 }
 
 void CWatermarkDecoration::damageEntire() {
-  auto w = m_window.lock();
-
-  if (!w)
-    return;
-
   if (m_hasLastBox)
     g_pHyprRenderer->damageBox(m_lastBox);
-
-  g_pHyprRenderer->damageWindow(w);
 }
 
 eDecorationLayer CWatermarkDecoration::getDecorationLayer() {

@@ -6,7 +6,7 @@ PKG_CFLAGS = $(shell $(PKG_CONFIG) --cflags $(PKG_DEPS))
 PKG_LIBS = $(shell $(PKG_CONFIG) --libs $(PKG_DEPS))
 
 SRC = src/main.cpp src/WatermarkDecoration.cpp src/Config.cpp src/TextureManager.cpp
-OUT = hypr-watermark.so
+OUT = hyprwatermark.so
 
 all: $(OUT)
 

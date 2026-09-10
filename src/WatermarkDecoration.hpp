@@ -22,6 +22,7 @@ public:
 
 private:
   PHLWINDOWREF m_window;
+
   CBox m_lastBox;
   bool m_hasLastBox = false;
 };

@@ -135,26 +135,46 @@ If you encounter issues with either configuration method, please open an issue w
 * Uses `Hyprgraphics::CImage` for image loading.
 * Uses window-relative geometry to keep the watermark synchronized with the window.
 
-## Known Issues
+## Known Issues & Technical Notes
+
+### Workspace Switch Afterimage (Resolved)
+
+#### Observed Behavior
+On Hyprland 0.56.2, the watermark renders correctly during normal window operations. However, when workspace animations (configured under the `workspaces` animation category in Hyprland) were enabled, switching from an occupied workspace to an empty workspace caused a watermark afterimage/ghost to remain visible on the screen.
+
+During testing:
+* Disabling animations entirely (`animations { enabled = false }`) eliminated the afterimage completely.
+* Adjusting `debug:damage_tracking` settings did not resolve the ghosting.
+* Explicitly damaging the previous watermark bounding box on workspace switch events did not solve the issue.
+
+#### Root Cause at the Plugin Level
+The decoration's `IHyprWindowDecoration::draw()` method previously only verified whether the window pointer was valid and mapped (`w->m_isMapped`). During workspace transitions, a mapped window remains mapped in memory even when its parent workspace (`w->m_workspace`) is no longer visible on the screen. Because the decoration did not query the workspace's state, it continued submitting a `CTexPassElement` to the renderer pass for an inactive workspace.
+
+#### Fix
+In `CWatermarkDecoration::draw()`, an explicit workspace visibility check was added to the render guard:
+
+```cpp
+if (!w || !w->m_isMapped || !w->m_workspace ||
+    !w->m_workspace->isVisible() || !TextureManager::globalTexture)
+    return;
+```
+
+*(Note: Earlier debugging attempts experimented with an `Event::bus()->m_events.workspace.active` listener to manually trigger damage box redraws, but this was discarded as redundant once the visibility guard was in place).*
+
+#### Why the Fix Works
+Checking `CWorkspace::isVisible()` (which checks the workspace's `m_visible` state) ensures that as soon as the owning workspace is no longer active and visible, the decoration immediately stops submitting render elements. This resolves the afterimage completely without needing to disable Hyprland animations or alter window opacity.
 
 ### Damage Tracking
 
 Precise damage tracking is currently being refined.
 
-The plugin tracks the watermark's previous bounding box and uses `damageBox()` to avoid unnecessarily redrawing the entire window. Under certain window movement and resize scenarios, this can result in an after-image or ghosting artifact.
-
-The current implementation may not always map the watermark's bounding box correctly to the coordinate space expected by Hyprland's renderer. Additional damage events may also be required for certain window state changes.
-
-This issue is under active investigation.
+The plugin tracks the watermark's previous bounding box and uses `damageBox()` to avoid unnecessarily redrawing the entire window when the window position or geometry has not changed.
 
 ## Roadmap
 
-* [ ] Fix precise damage tracking and eliminate after-images.
-* [ ] Verify and improve `.conf` configuration support.
-* [ ] Improve configuration options.
-* [ ] Add per-window filtering.
-* [ ] Add additional positioning modes.
-* [ ] Improve rendering and damage-tracking performance.
+* [x] Fix workspace-switch afterimage artifact with animations enabled.
+* [ ] Verify traditional `hyprland.conf` configuration format.
+* [ ] Add per-window filtering (exclude/include specific window classes or fullscreen).
 
 ## A Little Note 
 

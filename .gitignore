@@ -1,4 +1,6 @@
-AGENT_CONTEXT.md
+*.md
+!README.md
 build/
 *.so
 *.o
+*.log
