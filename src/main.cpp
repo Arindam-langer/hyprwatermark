@@ -9,11 +9,11 @@
 #include <hyprutils/signal/Listener.hpp>
 #include <vector>
 
-std::vector<CWatermarkDecoration*> g_Decorations;
+std::vector<CWatermarkDecoration *> g_Decorations;
 std::vector<Hyprutils::Signal::CHyprSignalListener> g_Listeners;
 
 static void damageAllDecorations() {
-  for (auto* d : g_Decorations) {
+  for (auto *d : g_Decorations) {
     if (d)
       d->damageEntire();
   }
@@ -34,13 +34,13 @@ static void onNewWindow(PHLWINDOW window) {
   }
 
   auto deco = makeUnique<CWatermarkDecoration>(window);
-  auto* raw = deco.get();
+  auto *raw = deco.get();
   HyprlandAPI::addWindowDecoration(PHANDLE, window, std::move(deco));
   g_Decorations.push_back(raw);
 }
 
 static void onCloseWindow(PHLWINDOW window) {
-  std::erase_if(g_Decorations, [&window](CWatermarkDecoration* d) {
+  std::erase_if(g_Decorations, [&window](CWatermarkDecoration *d) {
     return !d || d->getOwner() == window;
   });
 }
@@ -51,6 +51,7 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
   PHANDLE = handle;
 
   Config::init();
+  HyprlandAPI::reloadConfig(); // WIP: hot reloading
   TextureManager::loadTexture(Config::imagePath);
 
   g_Listeners.push_back(Event::bus()->m_events.window.open.listen(onNewWindow));
@@ -66,8 +67,9 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
     }
   }
 
-  return {"hypr-watermark", "Per-window background watermark PoC", "aru",
-          "0.1.0"};
+  return {"hyprwatermark",
+          "Customizable image watermarks inside application windows",
+          "Arindam-langer", "0.1.0"};
 }
 
 APICALL EXPORT void PLUGIN_EXIT() {
