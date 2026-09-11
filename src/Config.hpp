@@ -2,6 +2,7 @@
 
 #include <hyprland/src/plugins/PluginAPI.hpp>
 #include <string>
+#include <vector>
 
 inline HANDLE PHANDLE = nullptr;
 
@@ -12,7 +13,7 @@ extern float scale;
 extern std::string position;
 extern float offsetX;
 extern float offsetY;
-
+extern std::vector<std::string> excludeClasses;
 void init();
 void reload();
 } // namespace Config

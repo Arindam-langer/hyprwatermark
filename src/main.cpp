@@ -8,6 +8,10 @@
 #include <hyprland/src/plugins/PluginAPI.hpp>
 #include <hyprutils/signal/Listener.hpp>
 #include <vector>
+extern "C" {
+#include <lauxlib.h>
+#include <lua.h>
+}
 
 std::vector<CWatermarkDecoration *> g_Decorations;
 std::vector<Hyprutils::Signal::CHyprSignalListener> g_Listeners;
@@ -47,11 +51,44 @@ static void onCloseWindow(PHLWINDOW window) {
 
 APICALL EXPORT std::string PLUGIN_API_VERSION() { return HYPRLAND_API_VERSION; }
 
+// exclude list applications for watermark from config
+static int luaExclude(lua_State *L) {
+  if (!lua_istable(L, 1)) {
+    luaL_error(L, "watermark.exclude expects a table");
+    return 0;
+  }
+
+  Config::excludeClasses.clear();
+
+  const size_t length = lua_rawlen(L, 1);
+
+  for (size_t i = 1; i <= length; ++i) {
+    lua_rawgeti(L, 1, i);
+
+    if (!lua_isstring(L, -1)) {
+      lua_pop(L, 1);
+      luaL_error(L, "watermark.exclude expects a table of strings");
+      return 0;
+    }
+
+    Config::excludeClasses.emplace_back(lua_tostring(L, -1));
+
+    lua_pop(L, 1);
+  }
+
+  damageAllDecorations();
+
+  return 0;
+}
+
 APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
   PHANDLE = handle;
 
+  // exluding
+  HyprlandAPI::addLuaFunction(PHANDLE, "watermark", "exclude", luaExclude);
+
   Config::init();
-  HyprlandAPI::reloadConfig(); // WIP: hot reloading
+  HyprlandAPI::reloadConfig();
   TextureManager::loadTexture(Config::imagePath);
 
   g_Listeners.push_back(Event::bus()->m_events.window.open.listen(onNewWindow));

@@ -2,6 +2,7 @@
 #include "Config.hpp"
 #include "TextureManager.hpp"
 
+#include <algorithm>
 #include <hyprland/src/Compositor.hpp>
 #include <hyprland/src/render/Renderer.hpp>
 #include <hyprland/src/render/decorations/IHyprWindowDecoration.hpp>
@@ -29,11 +30,19 @@ SDecorationPositioningInfo CWatermarkDecoration::getPositioningInfo() {
 void CWatermarkDecoration::onPositioningReply(
     const SDecorationPositioningReply & /*reply*/) {}
 
+// window exclude
+static bool isExcluded(PHLWINDOW window) {
+  if (!window)
+    return true;
+
+  return std::ranges::find(Config::excludeClasses, window->m_class) !=
+         Config::excludeClasses.end();
+}
 void CWatermarkDecoration::draw(PHLMONITOR monitor, float const &alpha) {
   auto w = m_window.lock();
 
-  if (!w || !w->m_isMapped || !w->m_workspace ||
-      !w->m_workspace->isVisible() || !TextureManager::globalTexture)
+  if (!w || !w->m_isMapped || !w->m_workspace || !w->m_workspace->isVisible() ||
+      !TextureManager::globalTexture || isExcluded(w))
     return;
 
   auto pos = w->position(Desktop::View::IGeometric::GEOMETRIC_CURRENT);

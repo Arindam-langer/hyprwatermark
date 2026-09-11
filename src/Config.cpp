@@ -17,6 +17,7 @@ SP<Config::Values::CFloatValue> pScale;
 SP<Config::Values::CStringValue> pPosition;
 SP<Config::Values::CFloatValue> pOffsetX;
 SP<Config::Values::CFloatValue> pOffsetY;
+std::vector<std::string> excludeClasses;
 
 void init() {
   pPath = makeShared<Config::Values::CStringValue>(
