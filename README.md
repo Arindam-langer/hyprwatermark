@@ -74,7 +74,7 @@ The easiest way to install and manage the plugin is via `hyprpm` (Hyprland Plugi
 
 4. **Updating:**
    ```bash
-   hyprpm update hyprwatermark
+   hyprpm update
    ```
 
 ---
@@ -208,73 +208,40 @@ The `exclude` option allows you to prevent watermarks from appearing on specific
 
 ## Requirements
 
-* Hyprland `v0.56` or later
-* A supported Hyprland plugin environment
-* An image file to use as the watermark
+* Hyprland (built and tested against `v0.56.2`)
+* A supported Hyprland plugin environment (`hyprpm` or manual build)
+* `hyprgraphics` and `hyprland-headers` installed
+* An image file to use as the watermark (PNG, JPG, or WebP)
 
 ## Compatibility
 
-Hyprwatermark has currently been tested on:
-
-* **OS:** Arch Linux
-* **Compositor:** Hyprland `v0.56+`
-
-The plugin is currently developed and tested primarily on Arch Linux. Other distributions may work, but have not been explicitly tested.
+Tested with Hyprland 0.56.2.
+Because Hyprland plugins depend on internal compositor APIs, compatibility with other versions may require changes.
 
 ### Supported Configurations
 
-Both configuration formats are supported and verified:
-* **Hyprland Lua (`hyprland.lua`)** — Fully tested and supported.
-* **Native Hyprland `.conf` (`hyprland.conf`)** — Fully tested and supported.
+Both Hyprland configuration formats are supported and verified:
+* **Hyprland Lua (`hyprland.lua`)**
+* **Native Hyprland `.conf` (`hyprland.conf`)**
 
 ## Technical Implementation
 
 * Implements `IHyprWindowDecoration`.
-* Uses `DECORATION_LAYER_OVER` for rendering.
+* Uses `DECORATION_LAYER_OVER` for rendering above window contents while remaining beneath popups and menus.
 * Uses `CTexPassElement` with Hyprland's render-pass system.
 * Uses `Hyprgraphics::CImage` for image loading.
 * Uses window-relative geometry to keep the watermark synchronized with the window.
 
-## Known Issues & Technical Notes
+## Technical Notes
 
-### Workspace Switch Afterimage (Resolved)
+### Workspace Visibility
+During workspace transitions or when windows are mapped on inactive workspaces, the decoration verifies workspace visibility via `w->m_workspace->isVisible()` before submitting render elements to the render pass, preventing watermark ghosting or afterimages on empty workspaces.
 
-#### Observed Behavior
-On Hyprland 0.56.2, the watermark renders correctly during normal window operations. However, when workspace animations (configured under the `workspaces` animation category in Hyprland) were enabled, switching from an occupied workspace to an empty workspace caused a watermark afterimage/ghost to remain visible on the screen.
-
-During testing:
-* Disabling animations entirely (`animations { enabled = false }`) eliminated the afterimage completely.
-* Adjusting `debug:damage_tracking` settings did not resolve the ghosting.
-* Explicitly damaging the previous watermark bounding box on workspace switch events did not solve the issue.
-
-#### Root Cause at the Plugin Level
-The decoration's `IHyprWindowDecoration::draw()` method previously only verified whether the window pointer was valid and mapped (`w->m_isMapped`). During workspace transitions, a mapped window remains mapped in memory even when its parent workspace (`w->m_workspace`) is no longer visible on the screen. Because the decoration did not query the workspace's state, it continued submitting a `CTexPassElement` to the renderer pass for an inactive workspace.
-
-#### Fix
-In `CWatermarkDecoration::draw()`, an explicit workspace visibility check was added to the render guard:
-
-```cpp
-if (!w || !w->m_isMapped || !w->m_workspace ||
-    !w->m_workspace->isVisible() || !TextureManager::globalTexture)
-    return;
-```
-
-*(Note: Earlier debugging attempts experimented with an `Event::bus()->m_events.workspace.active` listener to manually trigger damage box redraws, but this was discarded as redundant once the visibility guard was in place).*
-
-#### Why the Fix Works
-Checking `CWorkspace::isVisible()` (which checks the workspace's `m_visible` state) ensures that as soon as the owning workspace is no longer active and visible, the decoration immediately stops submitting render elements. This resolves the afterimage completely without needing to disable Hyprland animations or alter window opacity.
+### Per-Window Exclusion
+Window exclusions are checked dynamically against `pWindow->m_szClass` using POSIX wildcard matching (`fnmatch`). An `Event::bus()->m_events.window.class_` listener triggers damage recalculations when window classes are assigned or modified asynchronously, and `damageBox()` is dispatched to immediately clear any previously rendered watermark area when an excluded application is detected.
 
 ### Damage Tracking
-
-Precise damage tracking is currently being refined.
-
-The plugin tracks the watermark's previous bounding box and uses `damageBox()` to avoid unnecessarily redrawing the entire window when the window position or geometry has not changed. When an excluded window is detected, `damageBox()` is triggered on the previous area to cleanly clear any remaining watermark pixels.
-
-## Roadmap
-
-* [x] Fix workspace-switch afterimage artifact with animations enabled.
-* [x] Add per-window filtering (exclude specific window classes or glob patterns).
-* [x] Verify traditional `hyprland.conf` configuration format.
+The plugin tracks the watermark's previous bounding box and utilizes `damageBox()` to avoid unnecessary full-window repaints during window moves, resizes, or exclusion transitions.
 
 ## A Little Note 
 

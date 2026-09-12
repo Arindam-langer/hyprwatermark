@@ -4,7 +4,7 @@ description = "A Hyprland plugin that adds customizable image watermarks inside 
 
 authors = ["Arindam Langer"]
 
-output = "hypr-watermark.so"
+output = "hyprwatermark.so"
 
 build = [
     "make"
