@@ -8,6 +8,10 @@ A Hyprland plugin that adds customizable image watermarks directly inside applic
 
 Unlike desktop overlays or wallpapers, Hyprwatermark attaches the watermark to the window itself, allowing it to move, resize, and switch workspaces with the application.
 
+## Showcase
+
+![Hyprwatermark Showcase](assets/hyprwatermark-demo.gif)
+
 ## Features
 
 * **Image watermark** — Display a custom image inside application windows.
