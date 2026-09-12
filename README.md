@@ -1,5 +1,9 @@
 # Hyprwatermark
 
+![GitHub License](https://img.shields.io/github/license/Arindam-langer/hyprwatermark)
+![GitHub last commit](https://img.shields.io/github/last-commit/Arindam-langer/hyprwatermark)
+![GitHub issues](https://img.shields.io/github/issues/Arindam-langer/hyprwatermark)
+
 A Hyprland plugin that adds customizable image watermarks directly inside application windows.
 
 Unlike desktop overlays or wallpapers, Hyprwatermark attaches the watermark to the window itself, allowing it to move, resize, and switch workspaces with the application.
@@ -29,6 +33,12 @@ The watermark is designed to:
 
 Hyprwatermark achieves this through Hyprland's native window decoration system.
 
+## About This Project
+
+This is my first Hyprland plugin, and my first time working with C++ at this level — including `.hpp` files and Hyprland's internal rendering and decoration APIs. I used GPT as a development aid along the way to work through unfamiliar concepts and parts of the Hyprland codebase.
+
+I've tried to keep the implementation clean and reliable, but if you're experienced with C++ or Hyprland and spot something that could be better, please open an issue or PR — I'm glad to learn from it.
+
 ## How It Works
 
 Hyprwatermark implements a custom `IHyprWindowDecoration`.
@@ -48,21 +58,18 @@ Because the watermark is implemented as a window decoration, it remains synchron
 
 ## Installation
 
-### Method 1: Using `hyprpm` (Recommended)
+### Method 1: Using hyprpm (Recommended)
 
-The easiest way to install and manage the plugin is via `hyprpm` (Hyprland Plugin Manager).
+`hyprpm` (Hyprland Plugin Manager) is the primary and recommended installation method. It is the easiest way for normal users to install, build, load, and update the plugin.
 
-1. **Add and build the plugin:**
+1. **Add, enable, and load the plugin:**
    ```bash
    hyprpm add https://github.com/Arindam-langer/hyprwatermark
-   ```
-
-2. **Enable the plugin:**
-   ```bash
    hyprpm enable hyprwatermark
+   hyprpm reload
    ```
 
-3. **Ensure it starts with Hyprland:**
+2. **Ensure it starts with Hyprland:**
    * **In `hyprland.conf`:**
      ```conf
      exec-once = hyprpm reload -n
@@ -72,7 +79,7 @@ The easiest way to install and manage the plugin is via `hyprpm` (Hyprland Plugi
      hl.exec_cmd("hyprpm reload -n")
      ```
 
-4. **Updating:**
+3. **Updating:**
    ```bash
    hyprpm update
    ```
@@ -81,7 +88,12 @@ The easiest way to install and manage the plugin is via `hyprpm` (Hyprland Plugi
 
 ### Method 2: Manual Build from Source
 
-If you prefer to compile manually:
+Manual building is a supported alternative for users who:
+
+* Don't use `hyprpm`
+* Want to build from source
+* Are developing or debugging the plugin
+* Want to use a local fork or modified version
 
 1. **Clone the repository:**
    ```bash
@@ -89,15 +101,15 @@ If you prefer to compile manually:
    cd hyprwatermark
    ```
 
-2. **Build the shared library:**
+2. **Build the shared library (`hyprwatermark.so`):**
    ```bash
    make
    ```
-   *(Requires `hyprland-headers` and `hyprgraphics` installed).*
+   *(Requires `hyprgraphics` and `hyprland-headers` when building manually).*
 
 3. **Load the plugin:**
    ```bash
-   hyprctl plugin load ./hyprwatermark.so
+   hyprctl plugin load "$(realpath ./hyprwatermark.so)"
    ```
 
 4. **Autoload in configuration:**
@@ -208,10 +220,12 @@ The `exclude` option allows you to prevent watermarks from appearing on specific
 
 ## Requirements
 
-* Hyprland (built and tested against `v0.56.2`)
-* A supported Hyprland plugin environment (`hyprpm` or manual build)
-* `hyprgraphics` and `hyprland-headers` installed
-* An image file to use as the watermark (PNG, JPG, or WebP)
+- Hyprland 0.56.2 (tested)
+- A supported Hyprland plugin environment:
+  - `hyprpm` (recommended), or
+  - manual build
+- `hyprgraphics` and `hyprland-headers` when building manually
+- An image file to use as the watermark (PNG, JPG, or WebP)
 
 ## Compatibility
 
@@ -220,9 +234,12 @@ Because Hyprland plugins depend on internal compositor APIs, compatibility with 
 
 ### Supported Configurations
 
-Both Hyprland configuration formats are supported and verified:
-* **Hyprland Lua (`hyprland.lua`)**
-* **Native Hyprland `.conf` (`hyprland.conf`)**
+The plugin supports both:
+
+- **Hyprland Lua** (`hyprland.lua`)
+- **Native Hyprland `.conf`** (`hyprland.conf`)
+
+Both formats have been tested with Hyprland 0.56.2.
 
 ## Technical Implementation
 
@@ -238,20 +255,10 @@ Both Hyprland configuration formats are supported and verified:
 During workspace transitions or when windows are mapped on inactive workspaces, the decoration verifies workspace visibility via `w->m_workspace->isVisible()` before submitting render elements to the render pass, preventing watermark ghosting or afterimages on empty workspaces.
 
 ### Per-Window Exclusion
-Window exclusions are checked dynamically against `pWindow->m_szClass` using POSIX wildcard matching (`fnmatch`). An `Event::bus()->m_events.window.class_` listener triggers damage recalculations when window classes are assigned or modified asynchronously, and `damageBox()` is dispatched to immediately clear any previously rendered watermark area when an excluded application is detected.
+Window exclusions are checked dynamically against `w->m_class` using POSIX wildcard matching (`fnmatch`). An `Event::bus()->m_events.window.class_` listener triggers damage recalculations when window classes are assigned or modified asynchronously, and `damageBox()` is dispatched to immediately clear any previously rendered watermark area when an excluded application is detected.
 
 ### Damage Tracking
 The plugin tracks the watermark's previous bounding box and utilizes `damageBox()` to avoid unnecessary full-window repaints during window moves, resizes, or exclusion transitions.
-
-## A Little Note 
-
-This is my first Hyprland plugin and also my first time working with C++ at this level, including working with .hpp files and Hyprland's internal libraries and rendering APIs.
-
-I used GPT as a development aid to understand unfamiliar concepts, APIs, and parts of the Hyprland codebase while building the plugin and implementing the functionality I had in mind.
-
-I've done my best to keep the implementation clean and make everything work reliably, but there is a good chance that parts of the code could be improved or that I may have used patterns that aren't ideal.
-
-If you're experienced with C++ or Hyprland and notice something that could be improved, please feel free to open an issue or submit a PR. I'm very much interested in learning from feedback and improving the codebase.
 
 ## License
 
