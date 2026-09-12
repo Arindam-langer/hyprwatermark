@@ -13,7 +13,7 @@ Unlike desktop overlays or wallpapers, Hyprwatermark attaches the watermark to t
 * **Window-bound** — The watermark follows the window when it moves or resizes.
 * **Native rendering** — Uses Hyprland's window decoration and rendering system.
 * **Non-invasive** — Does not modify the window's native `active_opacity` or `inactive_opacity`.
-* **Rounded corners** — Respects the window's configured corner rounding.
+* **Per-window exclusion** — Exclude specific applications or wildcard patterns (e.g. games, media players, terminals) from receiving a watermark.
 
 ## Motivation
 
@@ -48,61 +48,163 @@ Because the watermark is implemented as a window decoration, it remains synchron
 
 ## Installation
 
-The easiest way to install and manage this plugin is by using `hyprpm` (Hyprland Plugin Manager).
+### Method 1: Using `hyprpm` (Recommended)
 
-1. Add the repository and compile the plugin:
+The easiest way to install and manage the plugin is via `hyprpm` (Hyprland Plugin Manager).
+
+1. **Add and build the plugin:**
    ```bash
    hyprpm add https://github.com/Arindam-langer/hyprwatermark
    ```
 
-2. Enable the plugin:
+2. **Enable the plugin:**
    ```bash
    hyprpm enable hyprwatermark
    ```
 
-3. To ensure the plugin loads every time you start Hyprland, make sure you have this line in your `hyprland.conf`:
-   ```conf
-   exec-once = hyprpm reload -n
+3. **Ensure it starts with Hyprland:**
+   * **In `hyprland.conf`:**
+     ```conf
+     exec-once = hyprpm reload -n
+     ```
+   * **In `hyprland.lua`:**
+     ```lua
+     hl.exec_cmd("hyprpm reload -n")
+     ```
+
+4. **Updating:**
+   ```bash
+   hyprpm update hyprwatermark
    ```
+
+---
+
+### Method 2: Manual Build from Source
+
+If you prefer to compile manually:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Arindam-langer/hyprwatermark.git
+   cd hyprwatermark
+   ```
+
+2. **Build the shared library:**
+   ```bash
+   make
+   ```
+   *(Requires `hyprland-headers` and `hyprgraphics` installed).*
+
+3. **Load the plugin:**
+   ```bash
+   hyprctl plugin load ./hyprwatermark.so
+   ```
+
+4. **Autoload in configuration:**
+   * **In `hyprland.conf`:**
+     ```conf
+     exec-once = hyprctl plugin load /absolute/path/to/hyprwatermark.so
+     ```
+   * **In `hyprland.lua`:**
+     ```lua
+     hl.exec_cmd("hyprctl plugin load /absolute/path/to/hyprwatermark.so")
+     ```
 
 ## Configuration
 
-### Hyprland Config
+Hyprwatermark supports both traditional Hyprland `.conf` syntax and Hyprland's `Lua` configuration format.
+
+### Option 1: Native Hyprland `.conf` (`hyprland.conf`)
+
+You can configure the plugin using block syntax or dotted key syntax:
 
 ```conf
-plugin:watermark:path = /absolute/path/to/watermark.png
-plugin:watermark:opacity = 0.3
-plugin:watermark:position = center
-plugin:watermark:offset_x = 0
-plugin:watermark:offset_y = 0
-plugin:watermark:scale = 1.0
-```
+plugin {
+    watermark {
+        # Absolute path to your watermark image (PNG, JPG, WebP supported)
+        path = /home/username/Pictures/watermark.png
 
-### Hyprland Lua
+        # Watermark transparency: 0.0 (completely invisible) to 1.0 (fully opaque)
+        opacity = 0.3
 
-```lua
-plugin = {
-    watermark = {
-        path = "/absolute/path/to/watermark.png",
-        opacity = 0.1,
-        scale = 1.0,
-        position = "top-left",
-        offset_x = 0,
-        offset_y = 0,
-    },
+        # Size multiplier: 1.0 is original image size, 0.5 is half size
+        scale = 0.5
+
+        # Anchor position: center, top-left, top-right, bottom-left, bottom-right
+        position = top-left
+
+        # Fine-tune pixel offset from the chosen position (X: horizontal, Y: vertical)
+        offset_x = 0
+        offset_y = 0
+
+        # Comma-separated list of window classes or wildcard patterns to exclude
+        exclude = kitty, firefox, steam_app_*
+    }
 }
 ```
 
-### Options
+### Option 2: Hyprland Lua (`hyprland.lua`)
 
-| Option                 | Description                                                          | Default  |
-| ---------------------- | -------------------------------------------------------------------- | -------- |
-| `path`                 | Absolute path to the watermark image.                                | —        |
-| `opacity`              | Watermark opacity (`0.0`–`1.0`).                                     | —        |
-| `scale`                | Image scale multiplier.                                              | `1.0`    |
-| `position`             | `center`, `top-left`, `top-right`, `bottom-left`, or `bottom-right`. | `center` |
-| `offset_x`             | Horizontal offset in pixels.                                         | `0`      |
-| `offset_y`             | Vertical offset in pixels.                                           | `0`      |
+If you are using Hyprland's native Lua configuration:
+
+```lua
+hl.config({
+    plugin = {
+        watermark = {
+            -- Absolute path to your watermark image
+            path = "/home/username/Pictures/watermark.png",
+
+            -- Watermark opacity (0.0 to 1.0)
+            opacity = 0.1,
+
+            -- Image scale multiplier
+            scale = 0.5,
+
+            -- Position: "center", "top-left", "top-right", "bottom-left", "bottom-right"
+            position = "top-left",
+
+            -- Pixel offsets
+            offset_x = 0,
+            offset_y = 0,
+
+            -- Comma-separated window classes or wildcard patterns to exclude
+            exclude = "kitty, firefox, steam_app_*",
+        },
+    },
+})
+```
+
+### Options Reference
+
+| Option     | Type    | Description                                                                     | Default  |
+| ---------- | ------- | ------------------------------------------------------------------------------- | -------- |
+| `path`     | string  | Absolute path to the watermark image file.                                      | `""`     |
+| `opacity`  | float   | Watermark transparency (`0.0` invisible to `1.0` opaque).                       | `0.5`    |
+| `scale`    | float   | Scaling multiplier relative to the source image dimensions.                     | `0.35`   |
+| `position` | string  | Anchor location (`center`, `top-left`, `top-right`, `bottom-left`, `bottom-right`). | `center` |
+| `offset_x` | int     | Horizontal offset in pixels added to the anchor position.                       | `0`      |
+| `offset_y` | int     | Vertical offset in pixels added to the anchor position.                         | `0`      |
+| `exclude`  | string  | Comma-separated window classes or wildcard patterns where watermark is disabled.| `""`     |
+
+### Window Class Exclusion
+
+The `exclude` option allows you to prevent watermarks from appearing on specific application windows:
+
+* **Format**: Comma-separated string of window class names or wildcard patterns (e.g. `"kitty, firefox, steam_app_*"`).
+* **Whitespace**: Leading and trailing whitespace around each pattern is automatically trimmed.
+* **Matching**: Uses POSIX wildcard/glob matching (`fnmatch`):
+  * Exact match: `kitty`, `firefox`
+  * Wildcard prefix/suffix: `steam_app_*`, `*term*`
+* **Default behavior**: When `exclude` is empty or omitted, every mapped window receives a watermark.
+* **Finding a Window's Class**:
+  You can find the exact class of any open window by running:
+  ```bash
+  hyprctl activewindow
+  ```
+  Look for the `class: ...` line in the output. Alternatively, list all windows with:
+  ```bash
+  hyprctl clients
+  ```
 
 ## Requirements
 
@@ -119,13 +221,11 @@ Hyprwatermark has currently been tested on:
 
 The plugin is currently developed and tested primarily on Arch Linux. Other distributions may work, but have not been explicitly tested.
 
-### FYI
+### Supported Configurations
 
-The **Hyprland Lua configuration has been tested and is working**.
-
-The traditional Hyprland `.conf` configuration format has **not yet been tested**. The configuration syntax is included for reference, but compatibility with the `.conf` format has not been verified yet.
-
-If you encounter issues with either configuration method, please open an issue with your Hyprland version and relevant configuration.
+Both configuration formats are supported and verified:
+* **Hyprland Lua (`hyprland.lua`)** — Fully tested and supported.
+* **Native Hyprland `.conf` (`hyprland.conf`)** — Fully tested and supported.
 
 ## Technical Implementation
 
@@ -168,13 +268,13 @@ Checking `CWorkspace::isVisible()` (which checks the workspace's `m_visible` sta
 
 Precise damage tracking is currently being refined.
 
-The plugin tracks the watermark's previous bounding box and uses `damageBox()` to avoid unnecessarily redrawing the entire window when the window position or geometry has not changed.
+The plugin tracks the watermark's previous bounding box and uses `damageBox()` to avoid unnecessarily redrawing the entire window when the window position or geometry has not changed. When an excluded window is detected, `damageBox()` is triggered on the previous area to cleanly clear any remaining watermark pixels.
 
 ## Roadmap
 
 * [x] Fix workspace-switch afterimage artifact with animations enabled.
-* [ ] Verify traditional `hyprland.conf` configuration format.
-* [ ] Add per-window filtering (exclude/include specific window classes or fullscreen).
+* [x] Add per-window filtering (exclude specific window classes or glob patterns).
+* [x] Verify traditional `hyprland.conf` configuration format.
 
 ## A Little Note 
 

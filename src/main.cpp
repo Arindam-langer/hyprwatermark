@@ -8,10 +8,6 @@
 #include <hyprland/src/plugins/PluginAPI.hpp>
 #include <hyprutils/signal/Listener.hpp>
 #include <vector>
-extern "C" {
-#include <lauxlib.h>
-#include <lua.h>
-}
 
 std::vector<CWatermarkDecoration *> g_Decorations;
 std::vector<Hyprutils::Signal::CHyprSignalListener> g_Listeners;
@@ -49,43 +45,19 @@ static void onCloseWindow(PHLWINDOW window) {
   });
 }
 
-APICALL EXPORT std::string PLUGIN_API_VERSION() { return HYPRLAND_API_VERSION; }
-
-// exclude list applications for watermark from config
-static int luaExclude(lua_State *L) {
-  if (!lua_istable(L, 1)) {
-    luaL_error(L, "watermark.exclude expects a table");
-    return 0;
-  }
-
-  Config::excludeClasses.clear();
-
-  const size_t length = lua_rawlen(L, 1);
-
-  for (size_t i = 1; i <= length; ++i) {
-    lua_rawgeti(L, 1, i);
-
-    if (!lua_isstring(L, -1)) {
-      lua_pop(L, 1);
-      luaL_error(L, "watermark.exclude expects a table of strings");
-      return 0;
+static void onWindowClassChanged(PHLWINDOW window) {
+  for (auto *d : g_Decorations) {
+    if (d && d->getOwner() == window) {
+      d->damageEntire();
+      break;
     }
-
-    Config::excludeClasses.emplace_back(lua_tostring(L, -1));
-
-    lua_pop(L, 1);
   }
-
-  damageAllDecorations();
-
-  return 0;
 }
+
+APICALL EXPORT std::string PLUGIN_API_VERSION() { return HYPRLAND_API_VERSION; }
 
 APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
   PHANDLE = handle;
-
-  // exluding
-  HyprlandAPI::addLuaFunction(PHANDLE, "watermark", "exclude", luaExclude);
 
   Config::init();
   HyprlandAPI::reloadConfig();
@@ -94,6 +66,8 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
   g_Listeners.push_back(Event::bus()->m_events.window.open.listen(onNewWindow));
   g_Listeners.push_back(
       Event::bus()->m_events.window.close.listen(onCloseWindow));
+  g_Listeners.push_back(
+      Event::bus()->m_events.window.class_.listen(onWindowClassChanged));
   g_Listeners.push_back(Event::bus()->m_events.config.reloaded.listen(
       []() { onConfigReloaded(); }));
 

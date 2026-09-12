@@ -30,20 +30,24 @@ SDecorationPositioningInfo CWatermarkDecoration::getPositioningInfo() {
 void CWatermarkDecoration::onPositioningReply(
     const SDecorationPositioningReply & /*reply*/) {}
 
-// window exclude
-static bool isExcluded(PHLWINDOW window) {
-  if (!window)
-    return true;
-
-  return std::ranges::find(Config::excludeClasses, window->m_class) !=
-         Config::excludeClasses.end();
+static bool shouldShowWatermark(PHLWINDOW window) {
+  return window && !Config::isExcluded(window->m_class);
 }
+
 void CWatermarkDecoration::draw(PHLMONITOR monitor, float const &alpha) {
   auto w = m_window.lock();
 
-  if (!w || !w->m_isMapped || !w->m_workspace || !w->m_workspace->isVisible() ||
-      !TextureManager::globalTexture || isExcluded(w))
+  if (!w || !w->m_isMapped || !w->m_workspace ||
+      !w->m_workspace->isVisible() || !TextureManager::globalTexture)
     return;
+
+  if (!shouldShowWatermark(w)) {
+    if (m_hasLastBox) {
+      g_pHyprRenderer->damageBox(m_lastBox);
+      m_hasLastBox = false;
+    }
+    return;
+  }
 
   auto pos = w->position(Desktop::View::IGeometric::GEOMETRIC_CURRENT);
 
